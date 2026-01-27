@@ -30,3 +30,24 @@ export const countActiveUsers = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: What is average age of all users?
+
+export const averageAgeofAllUsers = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          averageAge: {
+            $avg: "$age",
+          },
+        },
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
