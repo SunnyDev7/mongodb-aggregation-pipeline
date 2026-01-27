@@ -102,3 +102,32 @@ export const countNumberofMalesandFemales = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: which country has the highest number of registered users
+
+export const countryWithHigeshRegistered = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $group: {
+          _id: "$company.location.country",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+      {
+        $limit: 2,
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
