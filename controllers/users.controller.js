@@ -81,3 +81,24 @@ export const getTopfiveCommonFruits = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question find the total number of males and females
+
+export const countNumberofMalesandFemales = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $group: {
+          _id: "$gender",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
