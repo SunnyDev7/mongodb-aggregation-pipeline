@@ -51,3 +51,33 @@ export const averageAgeofAllUsers = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: List the top 5 most common fruits among users
+//Note: the document in the DB has only 3 categories of fruits, hence it give a result og only 3 categories
+
+export const getTopfiveCommonFruits = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $group: {
+          _id: "$favoriteFruit",
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+      {
+        $limit: 5,
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
