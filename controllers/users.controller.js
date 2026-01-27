@@ -10,6 +10,8 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+//Question: How many users are active?
+
 export const countActiveUsers = async (req, res) => {
   try {
     const result = await User.aggregate([
