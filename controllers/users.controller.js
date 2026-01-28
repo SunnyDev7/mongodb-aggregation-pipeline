@@ -149,3 +149,37 @@ export const listAllUniqueEyeColor = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: What is the average number of tags per user?
+
+export const averageTagsPerUser = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $unwind: {
+          path: "$tags",
+        },
+      },
+      {
+        $group: {
+          _id: "$_id",
+          numberOdTags: {
+            $sum: 1 
+          } 
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          average: {
+            $avg: "$numberOdTags"
+          }
+        }
+      }
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
