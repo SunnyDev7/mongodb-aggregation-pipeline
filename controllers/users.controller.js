@@ -154,29 +154,47 @@ export const listAllUniqueEyeColor = async (req, res) => {
 
 export const averageTagsPerUser = async (req, res) => {
   try {
-    const result = await User.aggregate([
-      {
-        $unwind: {
-          path: "$tags",
+    const result = await User.aggregate(
+      //   [
+      //   {
+      //     $unwind: {
+      //       path: "$tags",
+      //     },
+      //   },
+      //   {
+      //     $group: {
+      //       _id: "$_id",
+      //       numberOdTags: {
+      //         $sum: 1
+      //       }
+      //     }
+      //   },
+      //   {
+      //     $group: {
+      //       _id: null,
+      //       average: {
+      //         $avg: "$numberOdTags"
+      //       }
+      //     }
+      //   }
+      // ]
+
+      [
+        {
+          $addFields: {
+            numberOfTags: {
+              $size: { $ifNull: ["$tags", []] },
+            },
+          },
         },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          numberOdTags: {
-            $sum: 1 
-          } 
-        }
-      },
-      {
-        $group: {
-          _id: null,
-          average: {
-            $avg: "$numberOdTags"
-          }
-        }
-      }
-    ]);
+        {
+          $group: {
+            _id: null,
+            average: { $avg: "$numberOfTags" },
+          },
+        },
+      ]
+    );
 
     res.json({ success: true, data: result });
   } catch (error) {
