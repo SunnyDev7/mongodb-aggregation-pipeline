@@ -11,6 +11,7 @@ import {
   averageTagsPerUser,
   enimTagPerUser,
   velitTagPerInactiveUser,
+  userWithPhNoPlusOne,
 } from "../controllers/users.controller.js";
 
 const router = express.Router();
@@ -25,5 +26,6 @@ router.get("/users/aggregate/6", listAllUniqueEyeColor);
 router.get("/users/aggregate/7", averageTagsPerUser);
 router.get("/users/aggregate/8", enimTagPerUser);
 router.get("/users/aggregate/9", velitTagPerInactiveUser);
+router.get("/users/aggregate/10", userWithPhNoPlusOne);
 
 export default router;

@@ -246,3 +246,24 @@ export const velitTagPerInactiveUser = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: How many users have a phone number starting with "+1 (940)"
+
+export const userWithPhNoPlusOne = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $match: {
+          "company.phone": /^\+1 \(940\)/
+        }
+      },
+      {
+        $count: 'usersWithSpecialNumber'
+      }
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
