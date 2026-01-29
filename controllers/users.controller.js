@@ -212,7 +212,32 @@ export const enimTagPerUser = async (req, res) => {
         },
       },
       {
-        $count: 'userWithEnimTag'
+        $count: "userWithEnimTag",
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+//Question: what are the names and age of users who are inactive and "velit" as a tag?
+
+export const velitTagPerInactiveUser = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $match: {
+          isActive: false,
+          tags: "velit",
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          age: 1,
+        },
       },
     ]);
 
