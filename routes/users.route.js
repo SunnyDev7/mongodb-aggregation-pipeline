@@ -9,6 +9,7 @@ import {
   countryWithHigeshRegistered,
   listAllUniqueEyeColor,
   averageTagsPerUser,
+  enimTagPerUser,
 } from "../controllers/users.controller.js";
 
 const router = express.Router();
@@ -21,5 +22,6 @@ router.get("/users/aggregate/4", countNumberofMalesandFemales);
 router.get("/users/aggregate/5", countryWithHigeshRegistered);
 router.get("/users/aggregate/6", listAllUniqueEyeColor);
 router.get("/users/aggregate/7", averageTagsPerUser);
+router.get("/users/aggregate/8", enimTagPerUser);
 
 export default router;

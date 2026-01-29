@@ -193,8 +193,28 @@ export const averageTagsPerUser = async (req, res) => {
             average: { $avg: "$numberOfTags" },
           },
         },
-      ]
+      ],
     );
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+//Question: How many users have "enim" as one of their tag?
+export const enimTagPerUser = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $match: {
+          tags: "enim",
+        },
+      },
+      {
+        $count: 'userWithEnimTag'
+      },
+    ]);
 
     res.json({ success: true, data: result });
   } catch (error) {
