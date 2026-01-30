@@ -310,3 +310,25 @@ export const sortUserbyFavFruite = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: How many users have 'ad' as the second tag in their list of tags?
+export const adAsSecondTag = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      [
+        {
+          $match: {
+            "tags.1": "ad",
+          },
+        },
+        {
+          $count: "secondTagAd",
+        },
+      ],
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

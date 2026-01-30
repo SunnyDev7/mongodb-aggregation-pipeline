@@ -14,6 +14,7 @@ import {
   userWithPhNoPlusOne,
   recentlyRegisteredUser,
   sortUserbyFavFruite,
+  adAsSecondTag,
 } from "../controllers/users.controller.js";
 
 const router = express.Router();
@@ -31,5 +32,6 @@ router.get("/users/aggregate/9", velitTagPerInactiveUser);
 router.get("/users/aggregate/10", userWithPhNoPlusOne);
 router.get("/users/aggregate/11", recentlyRegisteredUser);
 router.get("/users/aggregate/12", sortUserbyFavFruite);
+router.get("/users/aggregate/13", adAsSecondTag);
 
 export default router;
