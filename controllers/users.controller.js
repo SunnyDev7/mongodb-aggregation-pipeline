@@ -292,3 +292,21 @@ export const recentlyRegisteredUser = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: Categorize users by their favourite Fruit
+export const sortUserbyFavFruite = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $group: {
+          _id: "$favoriteFruit",
+          users: { $push: "$name" },
+        },
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
