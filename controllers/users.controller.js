@@ -372,3 +372,50 @@ export const companiesInUSAWithUserCount = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//Question: Lookup
+export const lookUp = async (req, res) => {
+  try {
+    const result = await User.aggregate(
+      [
+        {
+          $lookup: {
+            from: "authors",
+            localField: "author_id",
+            foreignField: "_id",
+            as: "authors_details",
+          },
+        },
+        {
+          $addFields: {
+            author_details: {
+              $arrayElemAt: ["$authors_details", 0],
+            },
+          },
+        },
+      ],
+
+      // [
+      //   {
+      //     $lookup: {
+      //       from: "authors",
+      //       localField: "author_id",
+      //       foreignField: "_id",
+      //       as: "authors_details"
+      //     }
+      //   },
+      //   {
+      //     $addFields: {
+      //       author_details: {
+      //         $first: "$authors_details"
+      //       }
+      //     }
+      //   }
+      // ]
+    );
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
