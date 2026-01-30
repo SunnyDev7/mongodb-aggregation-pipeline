@@ -339,9 +339,32 @@ export const enimAndidAstag = async (req, res) => {
     const result = await User.aggregate([
       {
         $match: {
-          tags: {$all: ["enim", "id"]}
-        }
-      }
+          tags: { $all: ["enim", "id"] },
+        },
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+//Question: List all the companies located in the USA with their corresponding user count?
+export const companiesInUSAWithUserCount = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $match: {
+          "company.location.country": "USA",
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          userCount: { $sum: 1 },
+        },
+      },
     ]);
 
     res.json({ success: true, data: result });
