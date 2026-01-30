@@ -254,12 +254,37 @@ export const userWithPhNoPlusOne = async (req, res) => {
     const result = await User.aggregate([
       {
         $match: {
-          "company.phone": /^\+1 \(940\)/
-        }
+          "company.phone": /^\+1 \(940\)/,
+        },
       },
       {
-        $count: 'usersWithSpecialNumber'
-      }
+        $count: "usersWithSpecialNumber",
+      },
+    ]);
+
+    res.json({ success: true, data: result });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+//Question: Who has registered the most recently?
+export const recentlyRegisteredUser = async (req, res) => {
+  try {
+    const result = await User.aggregate([
+      {
+        $sort: {
+          registered: -1,
+        },
+      },
+      { $limit: 4 },
+      {
+        $project: {
+          name: 1,
+          registered: 1,
+          favoriteFruit: 1,
+        },
+      },
     ]);
 
     res.json({ success: true, data: result });
